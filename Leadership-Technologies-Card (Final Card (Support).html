@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Leadership Technologies – Digital Business Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#00303f;
+  --deep:#03577a;
+  --sky:#3da3db;
+  --sky-pale:rgba(61,163,219,0.12);
+  --sky-border:rgba(61,163,219,0.25);
+  --text-dark:#00303f;
+  --text-mid:#03577a;
+  --white:#ffffff;
+  --surface:rgba(255,255,255,0.06);
+  --surface-hover:rgba(255,255,255,0.1);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Raleway',sans-serif;
+  background:#f0f7fc;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:0 0 40px;
+  overflow-x:hidden;
+}
+
+/* ─── CARD ─── */
+.card{
+  width:100%;
+  max-width:430px;
+  background:#fff;
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,48,63,0.22),0 2px 8px rgba(0,0,0,0.06);
+}
+.card-bg-lines{
+  position:absolute;
+  top:0;left:0;width:100%;height:100%;
+  pointer-events:none;
+  z-index:0;
+  overflow:hidden;
+}
+.card-bg-lines svg{
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  opacity:0.55;
+  mix-blend-mode:multiply;
+}
+/* ensure all card children sit above bg */
+.card > *:not(.card-bg-lines){position:relative;z-index:1}
+
+/* ─── HERO ─── */
+.hero{
+  position:relative;
+  background:linear-gradient(150deg, var(--navy) 0%, var(--deep) 55%, #1a7aaa 100%);
+  padding:46px 28px 80px;
+  text-align:center;
+  overflow:hidden;
+}
+
+/* Animated diagonal lines — matching brand swoosh aesthetic */
+.hero-lines{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+}
+.hero-lines svg{position:absolute;inset:0;width:100%;height:100%}
+@keyframes lineFade{0%{opacity:.18}50%{opacity:.38}100%{opacity:.18}}
+.ln1{animation:lineFade 4s ease-in-out infinite}
+.ln2{animation:lineFade 4s ease-in-out 1.3s infinite}
+.ln3{animation:lineFade 4s ease-in-out 2.6s infinite}
+
+/* Right-side arc flourish */
+.hero-arc{
+  position:absolute;right:-60px;top:-30px;width:260px;height:260px;
+  border-radius:50%;
+  border:1.5px solid rgba(61,163,219,0.35);
+  pointer-events:none;
+  animation:arcPulse 5s ease-in-out infinite;
+}
+.hero-arc::after{
+  content:'';position:absolute;inset:20px;border-radius:50%;
+  border:1px solid rgba(61,163,219,0.2);
+}
+@keyframes arcPulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.04);opacity:1}}
+
+/* Small corner squares — brand detail */
+.corner-sq{
+  position:absolute;width:10px;height:10px;
+  background:var(--sky);
+  opacity:.7;
+}
+.corner-sq.tl{top:18px;left:18px}
+.corner-sq.br{bottom:52px;right:18px}
+.corner-sq.ml{top:50%;left:14px;width:6px;height:6px;opacity:.4}
+
+/* Logo */
+.hero-logo-wrap{
+  position:relative;z-index:2;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:#fff;
+  border-radius:20px;
+  padding:16px 24px;
+  margin-bottom:22px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.28),0 0 0 1px rgba(255,255,255,0.1);
+  animation:popIn .8s cubic-bezier(.34,1.56,.64,1) .1s both;
+}
+.hero-logo-wrap svg{width:210px;height:auto;display:block}
+@keyframes popIn{from{opacity:0;transform:scale(.6) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+/* Name & tagline */
+.hero-name{
+  font-family:'Raleway',sans-serif;
+  font-size:11px;font-weight:700;
+  color:#ffffff;
+  letter-spacing:3px;text-transform:uppercase;
+  position:relative;z-index:2;
+  margin-bottom:4px;
+  animation:fadeUp .6s ease .35s both;
+  line-height:1.5;
+}
+.hero-name-line1{
+  display:block;
+  font-size:11px;font-weight:600;
+  color:rgba(255,255,255,0.75);
+  letter-spacing:3px;
+  margin-bottom:6px;
+}
+.hero-name-line2{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:13px;font-weight:800;
+  color:#ffffff;
+  letter-spacing:2.5px;
+}
+.hero-circle{
+  width:9px;height:9px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,0.6);
+  flex-shrink:0;
+  display:inline-block;
+}
+.hero-tagline{
+  display:none;
+}
+
+/* Wave bottom */
+.hero-wave{position:absolute;bottom:-2px;left:0;width:100%;line-height:0;z-index:2}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── QUICK ACTIONS ─── */
+.actions{
+  display:flex;justify-content:center;gap:10px;
+  padding:24px 18px 16px;
+  background:#fff;
+  animation:fadeUp .6s ease .55s both;
+}
+.action-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:14px 6px;border-radius:16px;border:none;cursor:pointer;
+  text-decoration:none;transition:all .22s ease;
+  font-family:'Raleway',sans-serif;
+}
+.action-btn:hover{transform:translateY(-3px);background:linear-gradient(135deg,var(--navy),var(--deep)) !important;color:#fff !important;border-color:transparent !important;box-shadow:0 10px 28px rgba(3,87,122,0.45) !important}
+.action-btn:hover .btn-icon svg path,.action-btn:hover .btn-icon svg circle{fill:#fff !important;stroke:#fff !important}
+.action-btn:active{transform:scale(.96)}
+.action-btn.primary{
+  background:var(--sky-pale);
+  color:var(--deep);
+  border:1.5px solid var(--sky-border);
+}
+.action-btn.secondary{
+  background:var(--sky-pale);
+  color:var(--deep);
+  border:1.5px solid var(--sky-border);
+}
+.action-btn.secondary:hover{background:rgba(61,163,219,0.18)}
+.action-btn .btn-icon{
+  width:26px;height:26px;
+  display:flex;align-items:center;justify-content:center;
+}
+.action-btn .btn-icon svg{width:22px;height:22px}
+.action-btn span.label{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+
+/* ─── SECTION DIVIDER ─── */
+.section-divider{
+  margin:0 20px 14px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(61,163,219,0.3),transparent);
+}
+
+/* ─── SECTIONS ─── */
+.section{
+  margin:0 16px 14px;
+  background:#fff;
+  border-radius:20px;
+  border:1.5px solid #e8f3fa;
+  overflow:hidden;
+  animation:fadeUp .6s ease both;
+  box-shadow:0 2px 12px rgba(0,48,63,0.06);
+}
+.section-header{
+  padding:12px 16px 10px;
+  border-bottom:1px solid #edf5fb;
+  display:flex;align-items:center;gap:8px;
+  background:linear-gradient(90deg,rgba(61,163,219,0.05),transparent);
+}
+.sec-icon{
+  width:28px;height:28px;
+  background:linear-gradient(135deg,var(--deep),var(--sky));
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.sec-icon svg{width:14px;height:14px}
+.section-header h2{
+  font-family:'Raleway',sans-serif;
+  font-size:10px;font-weight:700;
+  color:var(--deep);
+  letter-spacing:2px;text-transform:uppercase;
+}
+
+.contact-row{
+  display:flex;align-items:center;
+  padding:14px 16px;
+  border-bottom:1px solid #f4f8fc;
+  text-decoration:none;
+  transition:background .18s ease;
+  cursor:pointer;
+}
+.contact-row:last-child{border-bottom:none}
+.contact-row:hover{background:#f4faff}
+.contact-row:active{background:#e8f3fa}
+.row-icon{
+  width:40px;height:40px;
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-right:13px;
+  transition:transform .2s ease;
+}
+.contact-row:hover .row-icon{transform:scale(1.05)}
+.row-icon svg{width:18px;height:18px}
+.row-icon.filled{background:linear-gradient(135deg,var(--navy),var(--deep))}
+.row-icon.pale{background:var(--sky-pale);border:1.5px solid var(--sky-border)}
+.row-content{flex:1;min-width:0}
+.row-label{font-size:10px;color:#8baab8;font-weight:500;margin-bottom:2px;letter-spacing:.3px}
+.row-value{font-size:13.5px;color:var(--text-dark);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-arrow svg{width:14px;height:14px;flex-shrink:0;margin-left:6px;opacity:.4}
+
+/* Address */
+.address-box{padding:16px;display:flex;gap:13px;align-items:flex-start}
+.addr-icon{
+  width:40px;height:40px;border-radius:12px;
+  background:linear-gradient(135deg,var(--navy),var(--deep));
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.addr-icon svg{width:18px;height:18px}
+.address-text{font-size:13px;color:var(--text-dark);line-height:1.7}
+.address-text strong{
+  display:block;font-size:10px;color:#8baab8;
+  font-weight:600;margin-bottom:4px;letter-spacing:1px;text-transform:uppercase;
+}
+
+/* ─── SOCIAL STRIP ─── */
+.social-strip{
+  display:flex;justify-content:center;gap:14px;
+  padding:6px 20px 18px;
+  animation:fadeUp .6s ease 1s both;
+}
+.social-btn{
+  width:48px;height:48px;
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;
+  transition:all .25s cubic-bezier(.34,1.56,.64,1);
+  position:relative;overflow:hidden;
+}
+.social-btn::before{
+  content:'';position:absolute;inset:0;
+  opacity:0;transition:opacity .2s ease;
+}
+.social-btn:hover{transform:translateY(-4px) scale(1.05)}
+.social-btn:hover::before{opacity:1}
+.social-btn:active{transform:scale(.93)}
+.social-btn svg{width:22px;height:22px;position:relative;z-index:1}
+.social-btn.x-btn{
+  background:#2C2C2A;
+  box-shadow:0 4px 16px rgba(0,0,0,0.3);
+}
+.social-btn.tiktok-btn{
+  background:#2C2C2A;
+  box-shadow:0 4px 16px rgba(0,0,0,0.3);
+}
+.social-btn.ig-btn{
+  background:#2C2C2A;
+  box-shadow:0 4px 16px rgba(0,0,0,0.3);
+}
+.social-btn:hover{
+  transform:translateY(-4px) scale(1.05);
+  background:linear-gradient(135deg,var(--navy),var(--sky)) !important;
+  box-shadow:0 10px 28px rgba(3,87,122,0.5) !important;
+}
+
+/* ─── SAVE BUTTON ─── */
+.save-wrap{
+  padding:2px 16px 18px;
+  animation:fadeUp .6s ease .95s both;
+}
+.save-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:16px;
+  background:linear-gradient(135deg,var(--navy) 0%,var(--deep) 50%,#1a7aaa 100%);
+  border-radius:18px;
+  color:#fff;
+  font-family:'Raleway',sans-serif;
+  font-size:13px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;border:none;
+  transition:all .25s ease;
+  position:relative;overflow:hidden;
+  box-shadow:0 8px 26px rgba(0,48,63,0.35);
+}
+.save-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--sky) 0%,var(--deep) 100%);
+  opacity:0;transition:opacity .3s ease;
+}
+.save-btn:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,48,63,0.45)}
+.save-btn:hover::before{opacity:1}
+.save-btn:active{transform:scale(.98)}
+.save-btn svg{width:18px;height:18px;position:relative;z-index:1;flex-shrink:0}
+.save-btn-text{position:relative;z-index:1}
+
+/* Save confirmation ripple */
+.save-btn.saved{animation:saveFlash .5s ease}
+@keyframes saveFlash{0%{transform:scale(1)}50%{transform:scale(.97)}100%{transform:scale(1)}}
+
+/* ─── FOOTER ─── */
+.footer{
+  text-align:center;padding:10px 16px 20px;
+  font-size:11px;color:#b0c8d4;
+  letter-spacing:.3px;
+  animation:fadeUp .5s ease 1.1s both;
+}
+.footer span{color:var(--deep);font-weight:600}
+
+/* ─── SECTION DELAYS ─── */
+.section:nth-child(1){animation-delay:.62s}
+.section:nth-child(2){animation-delay:.72s}
+.section:nth-child(3){animation-delay:.82s}
+</style>
+</head>
+<body>
+<div class="card">
+
+<!-- ═══ BACKGROUND LINES ═══ -->
+<div class="card-bg-lines">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595.28 841.89" preserveAspectRatio="xMidYMid slice">
+    <g style="isolation:isolate">
+      <g style="mix-blend-mode:multiply;opacity:0.06">
+        <path fill="#00303f" d="M140.73,771.88c-30.71,26-63.28,51.38-97.7,76.12l-1.03-1.43C412.11,580.51,497.08,289.76,503.19,92.69c6.61-213.54-75.36-366.15-76.19-367.66l1.54-.84c.83,1.52,83.01,154.48,76.4,368.48-3.88,125.68-37.16,247.53-98.92,362.15-60.95,113.12-149.95,219.42-265.3,317.07Z"/>
+        <path fill="#00303f" d="M159.68,741.3c-40.12,33.97-83.53,66.76-130.18,98.32l-.99-1.46C404.16,584,496.88,297.2,508.52,101.37c12.61-212.2-64.61-366.31-65.39-367.84l1.57-.8c.78,1.53,78.2,155.99,65.59,368.65-7.41,124.9-43.95,245.15-108.62,357.41-58.12,100.9-139.22,195.52-241.97,282.5Z"/>
+        <path fill="#00303f" d="M177.89,712.82c-48.95,41.44-102.95,80.95-161.91,118.42l-.94-1.48C396.2,587.48,496.68,304.65,513.85,110.05c18.61-210.87-53.86-366.46-54.6-368.01l1.59-.75c.74,1.55,73.39,157.51,54.77,368.83-10.94,124.12-50.74,242.77-118.32,352.67-54.91,89.31-128.39,172.99-219.4,250.04Z"/>
+        <path fill="#00303f" d="M195.43,686.31c-57.26,48.48-121.66,94.06-192.97,136.55l-.9-1.51C388.25,590.96,496.48,312.1,519.18,118.73c24.6-209.53-43.11-366.63-43.8-368.19l1.61-.71c.69,1.57,68.58,159.03,43.95,369.01-14.47,123.33-57.54,240.39-128.02,347.93-51.35,78.35-117.43,151.76-197.49,219.54Z"/>
+        <path fill="#00303f" d="M212.39,661.66c-65.12,55.13-139.75,106.19-223.46,152.83l-.85-1.54C380.28,594.44,496.27,319.54,524.51,127.41c30.6-208.2-32.37-366.79-33-368.36l1.63-.66c.64,1.58,63.77,160.54,33.13,369.19-18,122.55-64.33,238.01-137.72,343.19-47.45,68.01-106.35,131.79-176.16,190.89Z"/>
+        <path fill="#00303f" d="M228.84,638.74c-72.61,61.47-157.28,117.42-253.45,167.37l-.81-1.56C372.33,597.93,496.08,326.99,529.85,136.08c36.6-206.86-21.62-366.94-22.21-368.54l1.65-.61c.59,1.6,58.96,162.06,22.31,369.37-21.53,121.76-71.12,235.63-147.42,338.45-43.22,58.25-95.13,113.02-155.33,163.99Z"/>
+        <path fill="#00303f" d="M244.88,617.44c-79.76,67.52-174.37,127.83-283.01,180.29l-.77-1.58C364.37,601.41,495.87,334.43,535.18,144.76c42.59-205.53-10.87-367.11-11.41-368.71l1.67-.56c.55,1.61,54.15,163.57,11.49,369.55-25.06,120.98-77.92,233.25-157.11,333.71-38.69,49.07-83.75,95.38-134.93,138.7Z"/>
+        <path fill="#00303f" d="M260.56,597.66c-86.62,73.33-191.09,137.51-312.22,191.7l-.72-1.61C356.42,604.9,495.68,341.88,540.52,153.44c48.59-204.2-.12-367.27-.62-368.89l1.68-.52c.5,1.63,49.34,165.09.67,369.73-28.59,120.19-84.71,230.87-166.81,328.97-33.86,40.46-72.21,78.81-114.88,114.93Z"/>
+        <path fill="#00303f" d="M275.95,579.29c-93.27,78.96-207.5,146.54-341.14,201.68l-.67-1.63C348.51,608.36,495.52,349.27,545.88,162.04c54.56-202.85,10.6-367.34,10.15-368.98l1.69-.46c.45,1.64,44.53,166.6-10.15,369.9-32.11,119.4-91.5,228.49-176.51,324.23-28.76,32.39-60.5,63.27-95.11,92.58Z"/>
+        <path fill="#00303f" d="M291.11,562.25c-99.73,84.43-223.67,154.97-369.83,210.35l-.62-1.65C340.55,611.85,495.32,356.72,551.21,170.72c60.55-201.52,21.35-367.51,20.95-369.16l1.71-.42c.4,1.66,39.72,168.11-20.97,370.08-35.64,118.62-98.29,226.11-186.21,319.49-23.39,24.84-48.6,48.71-75.58,71.54Z"/>
+        <path fill="#00303f" d="M306.1,546.43c-106.06,89.78-239.68,162.88-398.34,217.78l-.57-1.66C332.55,615.35,495.08,364.23,556.53,179.48c66.58-200.19,32.12-367.75,31.77-369.42l1.72-.37c.36,1.67,34.91,169.63-31.79,370.26-39.17,117.83-105.09,223.73-195.91,314.74-17.78,17.81-36.52,35.07-56.22,51.74Z"/>
+        <path fill="#00303f" d="M320.96,531.76c-112.28,95.06-255.56,170.32-426.74,224.07l-.53-1.68C324.6,618.84,494.89,371.67,561.86,188.16c72.58-198.86,42.87-367.91,42.56-369.6l1.73-.32c.31,1.69,30.1,171.14-42.61,370.43-42.7,117.05-111.88,221.35-205.6,310-11.92,11.27-24.26,22.31-36.98,33.08Z"/>
+        <path fill="#00303f" d="M335.75,518.15c-118.44,100.27-271.39,177.35-455.06,229.3l-.48-1.69c436.48-123.45,614.52-366.68,687.02-549,78.54-197.52,53.59-367.99,53.32-369.69l1.74-.27c.26,1.7,25.29,172.65-53.43,370.61-46.23,116.26-118.67,218.97-215.3,305.26-5.84,5.22-11.79,10.39-17.81,15.49Z"/>
+        <path fill="#00303f" d="M350.52,505.52c-.45.38-.88.75-1.33,1.13-124.39,104.89-286.57,183.09-482.03,232.42l-.43-1.71c442.01-111.56,627.81-350.84,705.84-531.92,84.54-196.19,64.33-368.16,64.12-369.87l1.75-.22c.21,1.72,20.48,174.17-64.25,370.79-49.54,114.96-124.79,215.69-223.67,299.39Z"/>
+      </g>
+    </g>
+  </svg>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+
+  <!-- Animated diagonal tech lines -->
+  <div class="hero-lines">
+    <svg viewBox="0 0 430 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <!-- Large swooping curves matching brand aesthetic -->
+      <path class="ln1" d="M-50,80 Q150,20 300,120 Q400,180 500,80" fill="none" stroke="rgba(61,163,219,0.25)" stroke-width="1.5"/>
+      <path class="ln1" d="M-50,100 Q150,40 300,140 Q400,200 500,100" fill="none" stroke="rgba(61,163,219,0.15)" stroke-width="1"/>
+      <path class="ln2" d="M-50,160 Q100,240 280,160 Q380,110 500,200" fill="none" stroke="rgba(61,163,219,0.2)" stroke-width="1.5"/>
+      <path class="ln2" d="M-50,180 Q100,260 280,180 Q380,130 500,220" fill="none" stroke="rgba(61,163,219,0.1)" stroke-width="1"/>
+      <path class="ln3" d="M200,-20 Q320,80 380,200 Q410,260 440,300" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+      <!-- Diagonal thin lines (brand texture) -->
+      <line x1="320" y1="-10" x2="480" y2="300" stroke="rgba(255,255,255,0.05)" stroke-width=".8"/>
+      <line x1="350" y1="-10" x2="510" y2="300" stroke="rgba(255,255,255,0.04)" stroke-width=".6"/>
+      <line x1="280" y1="-10" x2="440" y2="300" stroke="rgba(255,255,255,0.04)" stroke-width=".6"/>
+      <!-- Dot grid accent -->
+      <circle cx="380" cy="40" r="2" fill="rgba(61,163,219,0.4)"/>
+      <circle cx="400" cy="40" r="2" fill="rgba(61,163,219,0.25)"/>
+      <circle cx="420" cy="40" r="2" fill="rgba(61,163,219,0.15)"/>
+      <circle cx="380" cy="60" r="1.5" fill="rgba(61,163,219,0.2)"/>
+      <circle cx="400" cy="60" r="1.5" fill="rgba(61,163,219,0.12)"/>
+    </svg>
+  </div>
+
+  <!-- Corner brand squares -->
+  <div class="corner-sq tl"></div>
+  <div class="corner-sq br"></div>
+  <div class="corner-sq ml"></div>
+
+  <!-- Arc circle (top-right brand flourish) -->
+  <div class="hero-arc"></div>
+
+  <!-- Logo -->
+  <div class="hero-logo-wrap">
+    <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1080 435.1">
+      <defs>
+        <style>.st0{fill:#3da3db}.st1{fill:url(#lg1)}.st2{fill:#03577a}.st3{fill:none}.st4{clip-path:url(#cp2)}.st5{fill:#00303f}.st6{fill:url(#lg0)}.st7{clip-path:url(#cp1)}</style>
+        <clipPath id="cp1"><polygon class="st3" points="175.8 256.7 138.8 219.7 138.8 161.3 159.8 161.3 159.8 213.9 182 236.2 182 139 116.5 139 116.5 228.9 148.2 260.6 166.6 278.9 224.4 278.9 224.4 299.9 163.4 299.9 116.5 253 116.5 284.5 148.2 316.2 154.2 322.2 246.6 322.2 246.6 256.7 175.8 256.7"/></clipPath>
+        <linearGradient id="lg0" x1="118.1" y1="80.8" x2="119.1" y2="80.8" gradientTransform="translate(-15242.7 -10280) scale(130.1)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#03577a"/><stop offset="1" stop-color="#3da3db"/></linearGradient>
+        <clipPath id="cp2"><polygon class="st3" points="328 204.5 398.9 204.5 398.9 139 334.2 139 321.7 139 218.8 139 218.8 204.5 272.7 204.5 295 182.3 241 182.3 241 161.3 317.4 161.3 329.9 161.3 376.6 161.3 376.6 182.3 318.8 182.3 300.5 200.6 268.8 232.3 268.8 322.2 334.3 322.2 334.3 225 312 247.3 312 300 291 300 291 241.5 328 204.5"/></clipPath>
+        <linearGradient id="lg1" x1="118.3" y1="80.6" x2="119.3" y2="80.6" gradientTransform="translate(-21090.7 -14289.8) scale(180.1)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#03577a"/><stop offset="1" stop-color="#3da3db"/></linearGradient>
+      </defs>
+      <g class="st7"><rect class="st6" x="116.5" y="139" width="130.1" height="183.1"/></g>
+      <g class="st4"><rect class="st1" x="218.8" y="139.1" width="180.1" height="183.2"/></g>
+      <polygon class="st5" points="443.9 139.8 443.9 189.5 474.8 189.5 474.8 199.9 432.5 199.9 432.5 139.8 443.9 139.8"/>
+      <path class="st5" d="M490.9,182.5c.7,5.2,5.2,9,12.6,9s8.9-1.5,11.3-3.9l6.7,6.6c-4.5,4.6-11.8,6.9-18.2,6.9-14.6,0-23.3-9-23.3-22.6s8.8-22.2,22.5-22.2,23,8.8,21.4,26.2h-33.1ZM513.9,173.8c-.7-5.5-5-8.2-11-8.2s-10.3,2.8-11.9,8.2h22.9Z"/>
+      <path class="st5" d="M565.7,157.6h10v42.4h-9.9l-.5-6.2c-2.4,5-9,7.4-13.7,7.5-12.5,0-21.8-7.6-21.8-22.5s9.7-22.2,22.1-22.2c5.7,0,11.1,2.7,13.5,6.9l.3-5.8ZM540.2,178.7c0,8.1,5.6,12.9,12.5,12.9,16.5,0,16.5-25.7,0-25.7-7,0-12.5,4.7-12.5,12.8"/>
+      <path class="st5" d="M628.5,139.9v60.1h-9.8l-.7-5.8c-3.3,5.1-8.5,6.8-13.7,6.8-12.5,0-21.8-8.2-21.8-22.2s9.2-22.2,21.6-22.2,11.4,2.4,13.9,6.8v-23.4h10.5ZM593.1,178.7c0,7.4,5.3,12.5,12,12.5s12.3-4.8,12.3-12.5-5.7-12.4-12.3-12.4-12,4.7-12,12.4"/>
+      <path class="st5" d="M647.5,182.5c.7,5.2,5.2,9,12.6,9s8.9-1.5,11.3-3.9l6.7,6.6c-4.5,4.6-11.8,6.9-18.2,6.9-14.6,0-23.3-9-23.3-22.6s8.8-22.2,22.5-22.2,23,8.8,21.4,26.2h-33.1ZM670.5,173.8c-.7-5.5-5-8.2-11-8.2s-10.3,2.8-11.8,8.2h22.8Z"/>
+      <path class="st5" d="M698.4,157.6l.8,4.9c3.3-5.2,7.7-6,11.9-6s8.6,1.7,10.9,4l-4.7,9.1c-2.2-1.8-4.1-2.8-7.6-2.8-5.5,0-10.6,2.9-10.6,10.7v22.3h-10.5v-42.4h9.7Z"/>
+      <path class="st5" d="M753.6,168.8c-3-2.8-6.4-3.8-10.5-3.8s-7.7,1.6-7.7,4.2,2.5,4.3,7.9,4.6c8,.5,18.1,2.3,18.1,13.6s-6.1,13.9-18.2,13.9-13.4-1.1-19.6-7.6l5.2-7.5c3,3.4,9.9,5.8,14.6,5.9,4,0,7.7-2,7.7-5.1s-2.4-4.1-8.4-4.5c-8-.6-17.5-3.5-17.5-13.1s10.1-13.2,17.9-13.2,11.6,1.3,16.5,5.6l-5.8,6.9Z"/>
+      <path class="st5" d="M778.6,139.8v23.5c3.8-4.9,8.4-6.4,13.2-6.4,12,0,17.3,8.2,17.3,20.6v22.3h-10.5v-22.2c0-7.7-4-11-9.6-11s-10.5,5.2-10.5,11.6v21.6h-10.5v-60.1h10.5Z"/>
+      <path class="st5" d="M829.5,145.6c0,8.2-12.4,8.2-12.4,0s12.4-8.2,12.4,0M818,199.9h10.5v-42.5h-10.5v42.5Z"/>
+      <path class="st5" d="M838,217.6v-60h9.8l.7,5.8c3.3-4.7,8.9-6.8,13.7-6.8,13.1,0,21.7,9.7,21.7,22.2s-7.8,22.2-21.4,22.2-11.1-1.4-14.1-6v22.7h-10.5ZM873.4,178.8c0-6.6-4.5-12-12-12s-12,5.4-12,12,4.9,12,12,12c7.1,0,12-5.4,12-12"/>
+      <polygon class="st5" points="448.1 234.9 429 234.9 429 224.6 478.5 224.6 478.5 234.9 459.4 234.9 459.4 284.7 448.1 284.7 448.1 234.9"/>
+      <path class="st5" d="M481.9,267.3c.7,5.2,5.2,9,12.6,9s8.9-1.5,11.3-4l6.7,6.6c-4.5,4.6-11.8,6.9-18.2,6.9-14.6,0-23.3-9-23.3-22.6s8.8-22.2,22.5-22.2,23,8.8,21.4,26.2h-33.1ZM504.9,258.6c-.7-5.5-5-8.2-11-8.2s-10.3,2.8-11.9,8.2h22.9Z"/>
+      <path class="st5" d="M559.4,279.3c-4.9,4.8-10,6.7-16.3,6.7-12.3,0-22.5-7.4-22.5-22.4s10.2-22.4,22.5-22.4,10.7,1.7,15.3,6.3l-6.6,7c-2.5-2.2-5.6-3.4-8.5-3.4-7,0-12.2,5.2-12.2,12.5s5.5,12.4,12,12.4,6.7-1,9.3-3.5l7,6.9Z"/>
+      <path class="st5" d="M574.5,224.6v23.5c3.8-4.9,8.4-6.4,13.2-6.4,12,0,17.3,8.2,17.3,20.6v22.3h-10.5v-22.2c0-7.7-4-11-9.6-11s-10.5,5.2-10.5,11.6v21.6h-10.5v-60.1h10.5Z"/>
+      <path class="st5" d="M645.1,284.7v-22.2c0-6.4-3.5-11.3-10.2-11.3s-10.8,5.4-10.8,11.9v21.6h-10.4v-42.4h9.4l.7,5.8c4.3-4.2,8.6-6.4,13.9-6.4,10,0,18,7.5,18,20.8v22.2h-10.5Z"/>
+      <path class="st5" d="M706.7,263.6c0,12.2-8.3,22.1-22.1,22.1s-22-9.9-22-22.1,8.4-22.1,21.9-22.1,22.2,10,22.2,22.1M673.1,263.6c0,6.4,3.9,12.5,11.5,12.5s11.5-6,11.5-12.5-4.5-12.5-11.5-12.5c-7.6,0-11.5,6.2-11.5,12.5"/>
+      <rect class="st5" x="713.9" y="224.7" width="10.4" height="60"/>
+      <path class="st5" d="M775.6,263.6c0,12.2-8.3,22.1-22.1,22.1s-22-9.9-22-22.1,8.4-22.1,21.9-22.1,22.2,10,22.2,22.1M742,263.6c0,6.4,3.9,12.5,11.5,12.5s11.5-6,11.5-12.5-4.5-12.5-11.5-12.5c-7.6,0-11.5,6.2-11.5,12.5"/>
+      <path class="st5" d="M821.3,238.1l8.9,6.7-5.4,6.9c3.8,4.2,5.1,9.1,5.1,14.4s-2.3,14.5-10.3,18.2c8.1,4,10.1,9.9,10.1,16.1,0,13.4-10.3,21.7-24.4,21.7s-24.7-8.6-24.7-21.7h12c0,6.3,5.8,10.5,12.7,10.5s12.3-3.8,12.3-10.5-6.3-9.8-12.3-9.8c-15.2,0-24.7-9.3-24.7-24.5s11.1-24.7,24.7-24.7,7.8.5,11.2,2.8l4.8-6.1ZM792.6,266.1c0,8.5,5.7,13.5,12.7,13.5s12.6-5.1,12.6-13.5-5.7-13.7-12.6-13.7-12.7,5.2-12.7,13.7"/>
+      <path class="st5" d="M848.8,230.4c0,8.2-12.4,8.2-12.4,0s12.4-8.2,12.4,0M837.4,284.7h10.5v-42.5h-10.5v42.5Z"/>
+      <path class="st5" d="M866.2,267.3c.7,5.2,5.2,9,12.6,9s8.9-1.5,11.3-4l6.7,6.6c-4.5,4.6-11.8,6.9-18.2,6.9-14.6,0-23.3-9-23.3-22.6s8.8-22.2,22.5-22.2,23,8.8,21.4,26.2h-33.1ZM889.3,258.6c-.7-5.5-5-8.2-11-8.2s-10.3,2.8-11.8,8.2h22.8Z"/>
+      <path class="st5" d="M935,253.6c-3-2.8-6.4-3.8-10.5-3.8s-7.7,1.6-7.7,4.2,2.5,4.3,7.9,4.6c8,.5,18.1,2.3,18.1,13.6s-6.1,13.9-18.2,13.9-13.4-1.1-19.6-7.6l5.2-7.5c3,3.4,9.9,5.8,14.6,5.9,4,0,7.7-2,7.7-5.1s-2.4-4.1-8.4-4.5c-8-.6-17.5-3.5-17.5-13.1s10.1-13.2,17.9-13.2,11.6,1.3,16.5,5.6l-5.8,6.9Z"/>
+      <rect class="st2" x="183.4" y="118" width="21" height="21"/>
+      <rect class="st2" x="206" y="97.1" width="21" height="21"/>
+      <polygon class="st0" points="459.8 319.6 459.8 322.2 447.3 322.2 447.3 305.5 459.5 305.5 459.5 308.1 450.4 308.1 450.4 312.4 458.5 312.4 458.5 315 450.4 315 450.4 319.6 459.8 319.6"/>
+      <polygon class="st0" points="481.1 305.5 473.8 322.2 470.8 322.2 463.5 305.5 466.8 305.5 472.4 318.4 478 305.5 481.1 305.5"/>
+      <path class="st0" d="M488.7,321.3c-1.4-.7-2.4-1.8-3.2-3.1-.8-1.3-1.2-2.8-1.2-4.4s.4-3.1,1.2-4.4c.8-1.3,1.9-2.3,3.2-3.1,1.4-.7,2.9-1.1,4.6-1.1s3.2.4,4.6,1.1,2.4,1.8,3.2,3.1,1.2,2.8,1.2,4.4-.4,3.1-1.2,4.4c-.8,1.3-1.9,2.3-3.2,3.1-1.4.7-2.9,1.1-4.6,1.1-1.7,0-3.2-.4-4.6-1.1M496.3,319c.9-.5,1.6-1.2,2.1-2.1s.8-1.9.8-3-.3-2.1-.8-3c-.5-.9-1.2-1.6-2.1-2.1s-1.9-.8-3-.8-2.1.2-3,.8-1.6,1.2-2.1,2.1-.8,1.9-.8,3,.3,2.1.8,3c.5.9,1.2,1.6,2.1,2.1s1.9.8,3,.8,2.1-.2,3-.8"/>
+      <polygon class="st0" points="508.4 305.5 511.5 305.5 511.5 319.6 520.3 319.6 520.3 322.2 508.4 322.2 508.4 305.5"/>
+      <polygon class="st0" points="539.6 305.5 532.3 322.2 529.3 322.2 522 305.5 525.3 305.5 530.9 318.4 536.5 305.5 539.6 305.5"/>
+      <polygon class="st0" points="556.7 319.6 556.7 322.2 544.2 322.2 544.2 305.5 556.4 305.5 556.4 308.1 547.3 308.1 547.3 312.4 555.3 312.4 555.3 315 547.3 315 547.3 319.6 556.7 319.6"/>
+      <path class="st0" d="M583,306.2c1.1.5,1.9,1.2,2.5,2,.6.9.9,2,.9,3.2s-.3,2.3-.9,3.2c-.6.9-1.4,1.6-2.5,2.1-1.1.5-2.3.7-3.8.7h-3.8v4.8h-3.1v-16.7h6.9c1.4,0,2.7.2,3.8.7M582.2,313.9c.7-.6,1-1.4,1-2.5s-.3-1.9-1-2.5c-.7-.6-1.7-.9-3.1-.9h-3.6v6.6h3.6c1.4,0,2.4-.3,3.1-.9"/>
+      <path class="st0" d="M603.2,322.2l-3.4-4.9c-.1,0-.4,0-.7,0h-3.8v4.9h-3.1v-16.7h6.9c1.5,0,2.7.2,3.8.7,1.1.5,1.9,1.2,2.5,2,.6.9.9,2,.9,3.2s-.3,2.3-.9,3.2-1.5,1.6-2.6,2l3.8,5.5h-3.3ZM602.1,309c-.7-.6-1.7-.9-3.1-.9h-3.6v6.7h3.6c1.3,0,2.4-.3,3.1-.9s1-1.4,1-2.5-.3-1.9-1-2.5"/>
+      <path class="st0" d="M615.7,321.3c-1.4-.7-2.4-1.8-3.2-3.1-.8-1.3-1.2-2.8-1.2-4.4s.4-3.1,1.2-4.4c.8-1.3,1.9-2.3,3.2-3.1,1.4-.7,2.9-1.1,4.6-1.1s3.2.4,4.6,1.1,2.4,1.8,3.2,3.1c.8,1.3,1.2,2.8,1.2,4.4s-.4,3.1-1.2,4.4c-.8,1.3-1.8,2.3-3.2,3.1-1.4.7-2.9,1.1-4.6,1.1-1.7,0-3.2-.4-4.6-1.1M623.3,319c.9-.5,1.6-1.2,2.1-2.1.5-.9.8-1.9.8-3s-.3-2.1-.8-3c-.5-.9-1.2-1.6-2.1-2.1-.9-.5-1.9-.8-3-.8s-2.1.2-3,.8-1.6,1.2-2.1,2.1c-.5.9-.8,1.9-.8,3s.3,2.1.8,3,1.2,1.6,2.1,2.1c.9.5,1.9.8,3,.8s2.1-.2,3-.8"/>
+      <polygon class="st0" points="638.5 308.1 638.5 313.2 646.6 313.2 646.6 315.8 638.5 315.8 638.5 322.2 635.4 322.2 635.4 305.5 647.6 305.5 647.6 308.1 638.5 308.1"/>
+      <path class="st0" d="M656.4,321.3c-1.4-.7-2.4-1.8-3.2-3.1-.8-1.3-1.2-2.8-1.2-4.4s.4-3.1,1.2-4.4c.8-1.3,1.9-2.3,3.2-3.1,1.4-.7,2.9-1.1,4.6-1.1s3.2.4,4.6,1.1,2.4,1.8,3.2,3.1c.8,1.3,1.2,2.8,1.2,4.4s-.4,3.1-1.2,4.4c-.8,1.3-1.8,2.3-3.2,3.1-1.4.7-2.9,1.1-4.6,1.1-1.7,0-3.2-.4-4.6-1.1M664,319c.9-.5,1.6-1.2,2.1-2.1.5-.9.8-1.9.8-3s-.3-2.1-.8-3c-.5-.9-1.2-1.6-2.1-2.1-.9-.5-1.9-.8-3-.8s-2.1.2-3,.8-1.6,1.2-2.1,2.1c-.5.9-.8,1.9-.8,3s.3,2.1.8,3,1.2,1.6,2.1,2.1c.9.5,1.9.8,3,.8s2.1-.2,3-.8"/>
+      <path class="st0" d="M677.9,320.5c-1.3-1.3-1.9-3.2-1.9-5.6v-9.4h3.1v9.3c0,3.3,1.4,4.9,4.2,4.9s4.2-1.6,4.2-4.9v-9.3h3.1v9.4c0,2.4-.6,4.3-1.9,5.6-1.3,1.3-3.1,2-5.4,2-2.3,0-4.1-.7-5.4-2"/>
+      <polygon class="st0" points="712.6 305.5 712.6 322.2 710.1 322.2 700.8 310.9 700.8 322.2 697.8 322.2 697.8 305.5 700.3 305.5 709.5 316.8 709.5 305.5 712.6 305.5"/>
+      <path class="st0" d="M719.9,305.5h7.3c1.8,0,3.4.4,4.8,1,1.4.7,2.5,1.7,3.2,2.9.8,1.3,1.2,2.7,1.2,4.4s-.4,3.1-1.2,4.4c-.8,1.3-1.8,2.2-3.2,2.9-1.4.7-3,1-4.8,1h-7.3v-16.7ZM727.1,319.6c1.2,0,2.3-.2,3.2-.7s1.7-1.1,2.2-2,.8-1.9.8-3-.2-2.1-.8-3-1.2-1.5-2.2-2c-.9-.5-2-.7-3.2-.7h-4.1v11.5h4.1Z"/>
+      <polygon class="st0" points="742.4 305.5 745.5 305.5 745.5 319.6 754.3 319.6 754.3 322.2 742.4 322.2 742.4 305.5"/>
+      <polygon class="st0" points="765 316.3 765 322.2 761.9 322.2 761.9 316.4 755.3 305.5 758.7 305.5 763.5 313.6 768.5 305.5 771.5 305.5 765 316.3"/>
+    </svg>
+  </div>
+
+  <div class="hero-name">
+    <span class="hero-name-line1">Leadership Technologies</span>
+    <span class="hero-name-line2">
+      <span class="hero-circle"></span>
+      Support
+      <span class="hero-circle"></span>
+    </span>
+  </div>
+  <div class="hero-tagline">Evolve Profoundly</div>
+
+  <!-- Wave bottom transition -->
+  <div class="hero-wave">
+    <svg viewBox="0 0 430 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:50px">
+      <path d="M0,30 C60,50 130,10 215,30 C300,50 370,10 430,30 L430,50 L0,50 Z" fill="#fff"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ═══ QUICK ACTIONS ═══ -->
+<div class="actions">
+  <a href="tel:+264817653757" class="action-btn secondary">
+    <div class="btn-icon">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" fill="#03577a"/></svg>
+    </div>
+    <span class="label">Call</span>
+  </a>
+  <a href="mailto:support@leadership-tech.com" class="action-btn secondary">
+    <div class="btn-icon">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="#03577a"/></svg>
+    </div>
+    <span class="label">Email</span>
+  </a>
+  <a href="https://wa.me/264817653757" target="_blank" class="action-btn secondary">
+    <div class="btn-icon">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" fill="#03577a"/></svg>
+    </div>
+    <span class="label">WhatsApp</span>
+  </a>
+</div>
+
+<!-- ═══ CONTACT DETAILS ═══ -->
+
+<!-- Phone -->
+<div class="section">
+  <div class="section-header">
+    <div class="sec-icon">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" fill="white"/></svg>
+    </div>
+    <h2>Phone</h2>
+  </div>
+  <a href="tel:+264817653757" class="contact-row">
+    <div class="row-icon filled">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" fill="white"/></svg>
+    </div>
+    <div class="row-content">
+      <div class="row-label">Mobile · Support Line</div>
+      <div class="row-value">+264 81 765 3757</div>
+    </div>
+    <div class="row-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#b0c8d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </a>
+</div>
+
+<!-- Email & Web -->
+<div class="section">
+  <div class="section-header">
+    <div class="sec-icon">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="white"/></svg>
+    </div>
+    <h2>Email &amp; Website Address</h2>
+  </div>
+  <a href="mailto:support@leadership-tech.com" class="contact-row">
+    <div class="row-icon filled">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="white"/></svg>
+    </div>
+    <div class="row-content">
+      <div class="row-label">Support Email</div>
+      <div class="row-value">support@leadership-tech.com</div>
+    </div>
+    <div class="row-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#b0c8d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </a>
+  <a href="https://www.leadership-tech.com" target="_blank" class="contact-row">
+    <div class="row-icon pale">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#03577a" stroke-width="2"/><path d="M12 3c-2.5 2.5-4 5.5-4 9s1.5 6.5 4 9M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9M3 12h18" stroke="#03577a" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <div class="row-content">
+      <div class="row-label">Website</div>
+      <div class="row-value">www.leadership-tech.com</div>
+    </div>
+    <div class="row-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#b0c8d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </a>
+</div>
+
+<!-- Address -->
+<div class="section">
+  <div class="section-header">
+    <div class="sec-icon">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="white"/></svg>
+    </div>
+    <h2>Location</h2>
+  </div>
+  <div class="address-box">
+    <div class="addr-icon">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="white"/></svg>
+    </div>
+    <div class="address-text">
+      <strong>Headquarters</strong>
+      Windhoek, Khomas Region<br/>
+      Namibia
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SOCIAL STRIP ═══ -->
+<div class="social-strip">
+  <!-- X -->
+  <a href="https://x.com/leadershiptechh?s=21" target="_blank" class="social-btn x-btn" aria-label="X / Twitter">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="white"/></svg>
+  </a>
+  <!-- TikTok -->
+  <a href="https://www.tiktok.com/@leadership.technologies?_r=1&_t=ZS-95hg2th6UlO" target="_blank" class="social-btn tiktok-btn" aria-label="TikTok">
+    <svg viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.53V6.77a4.85 4.85 0 01-1.02-.08z"/></svg>
+  </a>
+  <!-- Instagram -->
+  <a href="https://www.instagram.com/leadership_technologies_?igsh=cnVzZDh4YXdkM3Q5&utm_source=qr" target="_blank" class="social-btn ig-btn" aria-label="Instagram">
+    <svg viewBox="0 0 24 24" fill="none">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="white" stroke-width="2" fill="none"/>
+      <circle cx="12" cy="12" r="4" stroke="white" stroke-width="2" fill="none"/>
+      <circle cx="17.5" cy="6.5" r="1.3" fill="white"/>
+    </svg>
+  </a>
+</div>
+
+<!-- ═══ SAVE CONTACT BUTTON ═══ -->
+<div class="save-wrap">
+  <button class="save-btn" id="saveBtn" onclick="downloadVCard()">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" fill="white"/></svg>
+    <span class="save-btn-text">Save Contact</span>
+  </button>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="footer">
+  <span>Leadership Technologies</span> · Digital Business Card<br/>
+  &copy; 2026 · All rights reserved
+</div>
+
+</div><!-- /card -->
+
+<script>
+function downloadVCard() {
+  const vcf = [
+    'BEGIN:VCARD',
+    'VERSION:3.0',
+    'FN:Leadership Technologies Support',
+    'N:Support;Leadership Technologies;;;',
+    'ORG:Leadership Technologies',
+    'TITLE:Support Department',
+    'TEL;TYPE=CELL:+264817653757',
+    'EMAIL;TYPE=WORK:support@leadership-tech.com',
+    'URL:https://www.leadership-tech.com',
+    'ADR;TYPE=WORK:;;Windhoek;Khomas Region;;Namibia',
+    'X-SOCIALPROFILE;TYPE=x:https://x.com/leadershiptechh',
+    'X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/leadership_technologies_',
+    'X-SOCIALPROFILE;TYPE=tiktok:https://www.tiktok.com/@leadership.technologies',
+    'NOTE:Evolve Profoundly',
+    'END:VCARD'
+  ].join('\r\n');
+
+  const blob = new Blob([vcf], {type:'text/vcard;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Leadership_Technologies_Support.vcf';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  // Feedback animation
+  const btn = document.getElementById('saveBtn');
+  const txt = btn.querySelector('.save-btn-text');
+  const orig = txt.textContent;
+  txt.textContent = '✓ Contact Saved!';
+  btn.style.background = 'linear-gradient(135deg,#03577a,#3da3db)';
+  setTimeout(() => {
+    txt.textContent = orig;
+    btn.style.background = '';
+  }, 2200);
+}
+</script>
+</body>
+</html>
